@@ -1,0 +1,58 @@
+Q.Given a coordinate (sr, sc) representing the starting pixel (row and column) of the flood fill, and a pixel value newColor, "flood fill" the image.
+
+To perform a "flood fill", consider the starting pixel, plus any pixels connected 4-directionally to the starting pixel of the same color as the starting pixel, plus any pixels connected 4-directionally to those pixels (also with the same color as the starting pixel), and so on. Replace the color of all of the aforementioned pixels with the newColor.
+
+At the end, return the modified image.
+
+sol:
+  class Solution {
+    
+    public boolean inside(int[][] image,int r1,int c1,boolean[][] visited,int sr,int sc){
+        int r=image.length;
+        int c=image[0].length;
+        return(r1>=0 && r1<r && c1>=0 && c1<c && (image[r1][c1]==image[sr][sc] && !visited[r1][c1]));
+    }
+    public int[][] dfs(int[][] image,int r1,int c1,int newColor,boolean [][] visited,int sr,int sc,int[][] result)
+    {
+        int r=image.length;
+        int c=image[0].length;
+        int[] neighbourrow=new int[] {-1,0,1,0};
+        int[] neighbourcolumn=new int[] {0,1,0,-1};
+        visited[r1][c1]=true;
+        for(int i=0;i<4;i++){
+            if (inside(image,r1+neighbourrow[i],c1+neighbourcolumn[i],visited,sr,sc)){
+                result[r1+neighbourrow[i]][c1+neighbourcolumn[i]]=result[r1][c1];  //changing neighbours to new color
+                dfs(image,r1+neighbourrow[i],c1+neighbourcolumn[i],newColor,visited,sr,sc,result);
+               
+            }
+        }
+        
+        return result;
+    }
+    public int[][] floodFill(int[][] image,int sr,int sc,int newColor){
+        int r=image.length;
+        int c=image[0].length;
+        int[][] result=new int[r][c];
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                result[i][j]=image[i][j];
+            }
+        }
+        result[sr][sc]=newColor;   // filling starting pixel with new color
+        boolean[][] visited=new boolean[r][c];
+        for(int i=sr;i<r;i++){
+            for(int j=sc;j<c;j++){
+                if(image[i][j]==image[sr][sc] && !visited[i][j]){
+                    result=dfs(image,i,j,newColor,visited,sr,sc,result);
+                }
+            }
+        }
+        return result;
+    }
+  }
+
+Sample Input: 
+image = [[1,1,1],[1,1,0],[1,0,1]]
+sr = 1, sc = 1, newColor = 2
+
+Sample Output: [[2,2,2],[2,2,0],[2,0,1]]

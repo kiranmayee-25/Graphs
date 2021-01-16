@@ -1,0 +1,47 @@
+Q.An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+sol:
+
+   class Solution {
+    public boolean inside(char[][] grid,int r1,int c1,boolean[][] visited){    // To check whether the point is valid
+        int r=grid.length;
+        int c=grid[0].length;
+        return(r1>=0 && r1<r && c1>=0 && c1<c && (grid[r1][c1]-'0'==1 && !visited[r1][c1]));
+    }
+    public void dfs(char[][] grid,int r1,int c1,boolean [][] visited){
+        int[] neighbourrow=new int[] {-1,0,1,0};
+        int[] neighbourcolumn=new int[] {0,1,0,-1};
+        visited[r1][c1]=true;
+        for(int i=0;i<4;i++){
+            if (inside(grid,r1+neighbourrow[i],c1+neighbourcolumn[i],visited)){
+                dfs(grid,r1+neighbourrow[i],c1+neighbourcolumn[i],visited);
+            }
+        }
+    }
+    
+    public int numIslands(char[][] grid){
+        int r=grid.length;
+        int c=grid[0].length;
+        boolean[][] visited=new boolean[r][c];
+        int count=0;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(grid[i][j]-'0'==1 && !visited[i][j]){
+                    dfs(grid,i,j,visited);
+                    count+=1;
+                }
+            }
+        }
+        return count;
+    }
+  }
+
+ 
+Sample Input: 
+grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Sample Output: 1
