@@ -1,0 +1,38 @@
+Q.Given a directed graph. The task is to do Breadth First Traversal of this graph starting from 0.
+
+sol:
+  class Solution
+  {
+    public ArrayList<Integer> a=new ArrayList<Integer>();
+    public boolean visited[];
+    public Queue<Integer> q=new LinkedList<Integer>();
+    public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        visited=new boolean[V];
+        bfs(0,adj);
+        return a;
+    }
+    public void bfs(int source,ArrayList<ArrayList<Integer>> adj){
+        visited[source]=true;
+        q.add(source);
+        while(!q.isEmpty()){
+            int k=q.remove();
+            a.add(k);
+            for(Integer x:adj.get(k)){
+                if(!visited[x]){
+                    visited[x]=true;
+                    q.add(x);
+                }
+            }
+        }
+    }
+  }
+Sample Input:
+5 4
+0 1 
+0 2
+0 3 
+2 4
+Sample output : 
+0 1 2 3 4 

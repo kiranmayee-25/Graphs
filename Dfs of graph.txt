@@ -1,0 +1,35 @@
+Q.Given a connected undirected graph. Perform a Depth First Traversal of the graph.
+
+sol:
+  class Solution
+  {
+    public ArrayList<Integer> a=new ArrayList<Integer>();
+    public boolean visited[];
+    public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        visited=new boolean[V];
+        dfs(0,adj);
+        return a;
+        
+        
+    }
+    public void dfs(int source, ArrayList<ArrayList<Integer>> adj){
+        visited[source]=true;
+        a.add(source);
+        for(Integer x:adj.get(source)){
+            if(!visited[x]){
+                dfs(x,adj);
+            }
+        }
+    }
+   }
+
+Sample input:
+5 4
+0 1 
+0 2
+0 3 
+2 4
+Sample output: 
+0 1 2 4 3 
