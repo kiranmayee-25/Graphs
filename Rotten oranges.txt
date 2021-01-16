@@ -1,0 +1,80 @@
+Q.You are given an m x n grid where each cell can have one of three values:
+
+0 representing an empty cell,
+1 representing a fresh orange, or
+2 representing a rotten orange.
+Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+sol:
+  class Solution {
+    public boolean inside(int[][] grid,int r1,int c1){            //To check whether point is valid or not
+        int R=grid.length;
+        int C=grid[0].length;
+        return(r1>=0 && r1<R && c1>=0 && c1<C && grid[r1][c1]==1);
+    }
+    public int orangesRotting(int[][] grid) {
+        int length=grid.length;
+        if(length==0){
+            return 0;
+        }
+        int r=grid.length;
+        int c=grid[0].length;
+        Queue<int[]> queue=new LinkedList<>();        //To store coordinates of cells containing rotten oranges
+        int freshoranges=0;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(grid[i][j]==2){
+                    int[] coordinate=new int[2];
+                    coordinate[0]=i;
+                    coordinate[1]=j;
+                    queue.add(coordinate);
+                }
+                else if(grid[i][j]==1){
+                   freshoranges+=1;
+                }
+            }
+        }
+        if(freshoranges==0){
+            return 0;
+        }
+        int[] row=new int[] {1,-1,0,0};
+        int[] col=new int[] {0,0,1,-1};
+        int time=0;
+        while(!queue.isEmpty()){
+            time+=1;
+            int m=queue.size();
+            for(int i=0;i<m;i++){
+                int[] rotten=queue.poll();
+                for(int i1=0;i1<4;i1++){
+                    int r1=rotten[0];
+                    int c1=rotten[1];
+                    if(inside(grid,r1+row[i1],c1+col[i1])){
+                        grid[r1+row[i1]][c1+col[i1]]=2;
+                        int [] neighbour=new int[2];
+                        neighbour[0]=r1+row[i1];
+                        neighbour[1]=c1+col[i1];
+                        queue.add(neighbour);           //Adding neighbour coordinates of cells containing rotten oranges
+                        freshoranges-=1;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+                
+            }
+        }
+        int totaltime=0;
+        if(freshoranges==0){
+            totaltime=time-1;
+        }
+        else{
+            totaltime=-1;
+        }
+        return totaltime;
+    }
+  }
+
+Sample Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+Sample Output: 4
